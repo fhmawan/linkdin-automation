@@ -184,13 +184,20 @@ Genuine high-impact comments from senior developers follow 4 specific archetypes
                            │
                            ▼
 ┌────────────────────────────────────────────────────────┐
-│           4. Interactive Review CLI (`lgrow engage`)   │
-│  `lgrow engage review`                                 │
-│  - View post context + author                          │
-│  - Choose [1], [2], [3]                                │
-│  - [e]dit in terminal editor                           │
-│  - [c]opy & open URL (manual safety mode)              │
-│  - [p]ost automatically with human typing jitter       │
+│           4. Dual Execution Modes                      │
+│                                                        │
+│  A) Interactive Review (`lgrow engage review`):        │
+│     - View post context + author                       │
+│     - Choose [1], [2], or [3]                          │
+│     - [e]dit in terminal editor                        │
+│     - [c]opy & open URL in browser                     │
+│     - [p]ost via browser session                       │
+│                                                        │
+│  B) Autonomous Mode (`lgrow engage run --auto`):       │
+│     - 100% hands-free background loop                  │
+│     - Selects highest quality passed comment           │
+│     - Random human typing jitter (50-150ms/key)        │
+│     - Randomized intervals (15-45m), daily caps        │
 └────────────────────────────────────────────────────────┘
 ```
 
