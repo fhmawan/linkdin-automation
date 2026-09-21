@@ -19,6 +19,9 @@ Typical daily cost: **~15 Gemini calls out of ~1,500 available**, because a
 pure-Python prefilter cuts roughly 1,000 fetched postings to a 60-job shortlist
 before the model sees anything, and scoring is batched ~12 jobs per call.
 
+> [!TIP]
+> For a complete guide to how LinkedIn automation works in this codebase and future growth options (engagement, connections, carousels), see **[docs/LINKEDIN_AUTOMATION.md](docs/LINKEDIN_AUTOMATION.md)**.
+
 ---
 
 ## Setup
