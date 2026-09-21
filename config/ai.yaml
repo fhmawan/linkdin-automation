@@ -1,0 +1,80 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# GEMINI API SETTINGS.
+#
+# All AI goes through the Gemini REST API with an API key from
+# https://aistudio.google.com/apikey, set as GEMINI_API_KEY in .env.
+#
+# This used to run through the `gemini` CLI so that calls would spend a Google
+# AI Pro subscription. That route is gone: Google retired the free "Gemini Code
+# Assist for individuals" tier for the CLI, so a personal login now writes valid
+# credentials and then fails every call with IneligibleTierError.
+#
+# THE FREE TIER ALLOWS 20 REQUESTS PER DAY, COUNTED PER MODEL FAMILY.
+# Measured 2026-08-27: `limit: 20, model: gemini-3.5-flash`, and a 70-second
+# wait did not clear it. That is the real constraint on this project now, and it
+# is why the fallback chain below deliberately spans two families — when the
+# flash bucket is spent, the lite bucket is still open.
+#
+# Budget accordingly: a crawl costs ~2 calls, a tailored application ~3, a post
+# draft ~2. Model IDs churn; `lgrow doctor --probe` tells you if a pin is stale.
+# ─────────────────────────────────────────────────────────────────────────────
+
+# ─── Two providers, split on privacy, not just cost ──────────────────────────
+#
+# An entry is `provider:model`, split on the FIRST colon (OpenRouter IDs carry
+# their own, as in `openrouter:z-ai/glm-5.2:free`). A bare name means Gemini.
+#
+# `cheap` runs job scoring. Those prompts carry a profile brief — headline,
+# skills, geo, seniority — and no name, phone, email or resume text, so they are
+# safe to send to OpenRouter's free endpoints, which generally require opting
+# into "free endpoints that may train on your inputs" in your account settings.
+#
+# `quality` writes cover letters, resume rewrites and screener answers. Those
+# prompts contain your full resume, name, phone, email, work authorisation and
+# salary expectations. It is deliberately Gemini-only. Do not add an OpenRouter
+# entry to the quality chain without deciding you are fine with that.
+#
+# Free models with structured-output support, checked 2026-08-28 against
+# https://openrouter.ai/api/v1/models — only 4 of 18 free models qualify, and
+# the whole pipeline depends on schema-valid JSON:
+#     z-ai/glm-5.2:free                        256k ctx
+#     nvidia/nemotron-3-super-120b-a12b:free   262k ctx
+#     dots-studio/dots-3-note-preview:free     512k ctx
+#     liquid/lfm-2.5-2.6b:free                  65k ctx  (very small)
+models:
+  quality: gemini-3.5-flash
+  cheap: openrouter:z-ai/glm-5.2:free
+  # Tried in order when a tier fails on quota, overload or a stale model name.
+  fallbacks:
+    quality:
+      - gemini-3.1-flash-lite
+      - gemini-3.5-flash-lite
+    cheap:
+      - openrouter:nvidia/nemotron-3-super-120b-a12b:free
+      - openrouter:dots-studio/dots-3-note-preview:free
+      - gemini-3.5-flash-lite      # last resort: back to Google
+
+budget:
+  # Our own ceiling, checked before any call, purely as a runaway-loop guard.
+  #
+  # Note this counter is NOT family-aware while Google's quota is: with a flash
+  # tier and a lite tier there are two independent 20/day buckets, so ~40 calls
+  # are actually available. A single number below 20 therefore stops the day
+  # early — 18 blocked a screener-answer draft while the lite bucket was still
+  # open. Google's own 429 plus the fallback chain is the real enforcement;
+  # this is just the backstop.
+  max_calls_per_day: 30
+  # Refuse to start a batch stage if fewer than this many calls remain.
+  reserve_calls: 3
+
+runtime:
+  timeout_seconds: 120           # a big batch-scoring prompt can be slow
+  max_retries: 3                 # per call, on quota and transport errors
+  backoff_base_seconds: 5        # exponential: 5s, 10s, 20s
+  backoff_max_seconds: 120
+
+schema_retry:
+  # `responseSchema` enforces shape server-side, so this is a backstop rather
+  # than the mechanism it was under the CLI. Pydantic still validates value
+  # ranges the schema cannot express.
+  max_attempts: 2

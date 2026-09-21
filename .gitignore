@@ -1,0 +1,24 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+*.egg-info/
+
+# Secrets — never commit
+.env
+data/.tokens.json
+
+# Generated schedule wrappers. Both embed one machine's absolute paths and its
+# entire PATH at install time, so committing them means the other machine
+# clones a wrapper pointing at directories it does not have.
+scripts/lgrow-cron.sh
+scripts/lgrow-task.cmd
+
+# Local state
+data/app.db
+data/app.db-journal
+data/logs/
+data/applications/
+data/journal.md
+data/resume_base.docx
+data/*.lock

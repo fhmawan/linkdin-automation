@@ -1,0 +1,90 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# HOW YOUR POSTS SHOULD SOUND.
+#
+# This file is the difference between growth and looking like a bot. The
+# banned_phrases list is enforced twice: in the prompt, and again in Python
+# after generation (see posts/generate.py).
+# ─────────────────────────────────────────────────────────────────────────────
+
+cadence:
+  posts_per_week: 3
+  days: [tuesday, wednesday, thursday]
+  slots: ["08:15", "12:30"]      # local time; one is chosen per day
+  jitter_minutes: 20             # so publish times never look machine-generated
+  max_per_day: 1
+
+# ─── Content pillars ─────────────────────────────────────────────────────────
+# Weights are relative and drive rotation, so you don't post the same shape
+# of thing every time. They should sum to roughly 100.
+pillars:
+  - name: build_in_public
+    weight: 40
+    brief: >
+      Something you actually built, broke, or figured out this week. Must
+      contain a specific technical detail — a number, an error message, a
+      tool name, a before/after. This is the pillar that earns credibility.
+  - name: technical_howto
+    weight: 30
+    brief: >
+      Teach one small thing properly. A gotcha you hit and how you solved it.
+      Reader should be able to act on it immediately.
+  - name: market_observation
+    weight: 20
+    brief: >
+      What you're seeing in the job market from real postings you reviewed —
+      which skills keep appearing, what's disappearing. Concrete counts only,
+      never vague trend-talk.
+  - name: reflection
+    weight: 10
+    brief: >
+      An honest lesson from the job search or from learning in public.
+      Vulnerable and specific, never a humblebrag.
+
+# ─── Hard structural rules ───────────────────────────────────────────────────
+style:
+  # LinkedIn truncates around 140 chars behind "…see more". The hook is the
+  # single biggest lever on reach.
+  hook_max_chars: 140
+  min_chars: 700
+  max_chars: 1300
+  max_hashtags: 3
+  line_break_every_sentences: 2
+  require_closing_question: true
+  require_concrete_detail: true  # must cite something from your activity log
+  first_person: true
+
+tone:
+  - Plain and direct. Short words over long ones.
+  - Write like you're explaining it to one competent friend, not an audience.
+  - Concrete over abstract. Always prefer the specific example.
+  - Admit difficulty and uncertainty where it's real.
+  - No hype, no motivational-poster voice, no fake vulnerability.
+
+# ─── Never let these through ─────────────────────────────────────────────────
+banned_phrases:
+  - "I'm thrilled to announce"
+  - "I'm excited to share"
+  - "I'm humbled"
+  - "game-changer"
+  - "game changer"
+  - "deep dive"
+  - "leverage"
+  - "synergy"
+  - "unlock the power"
+  - "in today's fast-paced"
+  - "the future of"
+  - "let that sink in"
+  - "agree?"
+  - "thoughts?"
+  - "Here's the thing:"
+  - "It's not just about"
+  - "This is huge"
+  - "delve"
+  - "tapestry"
+  - "testament to"
+banned_chars:
+  - "—"                          # em-dash: the clearest AI tell in short posts
+  - "–"
+
+# Rejected outright if the draft is this similar to any of your last 10 posts.
+max_similarity_to_recent: 0.55

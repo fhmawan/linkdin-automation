@@ -1,0 +1,58 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# WHERE JOBS COME FROM.
+#
+# Every source here is a documented, public, no-auth JSON API. LinkedIn is
+# deliberately absent: scraping it is what gets accounts suspended, and these
+# feeds cover the same remote market. See RISKS.md.
+# ─────────────────────────────────────────────────────────────────────────────
+
+http:
+  user_agent: "lgrow/0.1 (personal job search; sajidfaheem29@gmail.com)"
+  timeout_seconds: 25
+  max_retries: 3
+  delay_between_requests: 1.0    # be a polite client
+
+aggregators:
+  himalayas:
+    enabled: true
+    # Richest filtering of the free feeds (country, seniority, timezone).
+    limit: 200
+  remotive:
+    enabled: true
+    limit: 150
+    # Remotive wants a category or search term; queries below are used.
+  arbeitnow:
+    enabled: true
+    pages: 3
+  jobicy:
+    enabled: true
+    count: 100
+  remoteok:
+    enabled: true
+
+# Free-text queries fanned out across sources that support search.
+# Each one costs an HTTP round trip per search-capable source, with a 1s
+# delay between requests — keep the list tight and stack-specific.
+queries:
+  - "node.js backend"
+  - "typescript backend"
+  - "full stack typescript"
+  - "nestjs"
+  - "graphql"
+  - "react next.js"
+
+# ─── ATS boards: the highest-signal source ───────────────────────────────────
+# These are the employer's own feed — often live here days before they reach
+# any aggregator. Add companies you'd genuinely like to work for.
+#
+# Find the slug from the careers-page URL:
+#   boards.greenhouse.io/SLUG           job-boards.greenhouse.io/SLUG
+#   jobs.lever.co/SLUG                  jobs.ashbyhq.com/SLUG
+ats:
+  enabled: true
+  greenhouse: []                 # - stripe
+  lever: []                      # - netflix
+  ashby: []                      # - linear
+
+# Jobs older than this are dropped — stale postings waste your review time.
+max_age_days: 21

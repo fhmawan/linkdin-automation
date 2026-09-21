@@ -1,0 +1,116 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# WHO YOU ARE.  Everything marked FILL_ME must be set before `lgrow doctor`
+# will pass.  Nothing here is guessed from your environment — see `git.authors`.
+# ─────────────────────────────────────────────────────────────────────────────
+
+identity:
+  full_name: Faheem Sajid
+  headline: "Full Stack Engineer: Node.js, NestJS, TypeScript, GraphQL, PostgreSQL"
+  location: "Lahore, Pakistan"
+  email: sajidfaheem29@gmail.com
+  phone: "+92 3257130217"
+  linkedin_url: ""
+  portfolio_url: ""
+  github_username: ""            # optional; nothing reads it yet
+
+git:
+  # Used to harvest your recent commits as raw material for posts.
+  # Set these to the name/email you actually commit under. Run this to check:
+  #     git log --format='%an <%ae>' | sort -u | head
+  authors: []                    # e.g. ["Faheem Sajid", "sajidfaheem29@gmail.com"]
+  repo_paths: []                 # absolute paths to repos to scan
+  lookback_days: 7
+
+# ─── What you want to be hired for ───────────────────────────────────────────
+targets:
+  roles:                         # matched loosely against job titles
+    - Full Stack Engineer
+    - Backend Engineer
+    - Software Engineer
+    - Node.js Engineer
+    - TypeScript Engineer
+    - Full Stack Developer
+    - Backend Developer
+  seniority: [mid, senior]       # junior | mid | senior | lead | staff
+
+  # The seniority list above only matches words in a title. These two are what
+  # the AI screener actually uses to judge an "N+ years required" line.
+  years_experience: 2            # what your resume supports (Dec 2024 onward)
+  max_years_required: 3          # you've chosen to stretch this far up
+
+  skills_core:                   # must-haves; strong positive signal
+    - TypeScript
+    - Node.js
+    - NestJS
+    - GraphQL
+    - PostgreSQL
+    - React
+    - Next.js
+  skills_secondary:              # nice-to-haves; weaker positive signal
+    - JavaScript
+    - Express.js
+    - Angular
+    - Apollo Federation
+    - PostGraphile
+    - TypeORM
+    - Sequelize
+    - MongoDB
+    - MySQL
+    - Redis
+    - Docker
+    - AWS Lambda
+    - AWS S3
+    - REST
+    - WebSockets
+    - Redux
+    - Relay
+    - Tailwind CSS
+    - CI/CD
+    - Microservices
+  exclude_keywords:              # instant reject if found in the title
+    - clearance
+    - onsite only
+    - unpaid
+    - commission only
+    - intern
+    - internship
+    - engineering manager
+    - director
+    - head of
+    - php
+    - wordpress
+    - salesforce
+    - drupal
+    - ".net"
+  employment_types: [full_time, contract]
+  salary_floor_usd: null         # null = don't filter on salary
+
+# ─── Where you can legally work ──────────────────────────────────────────────
+# "worldwide" keeps roles open to anyone. The rest are the English-language
+# markets you named. Remove any you can't realistically work in.
+geo:
+  allow: [worldwide, US, CA, AU, GB, IE, NZ]
+  # A job whose text restricts it to a country NOT in `allow` gets demoted,
+  # even when its metadata claims "remote".
+  my_timezone: "Asia/Karachi"    # used to flag overlap problems
+
+work_auth:
+  authorized_countries: [PK]     # countries where you already have the right to work
+  # false = you are pursuing remote contract / EOR work, not relocation. Set
+  # this to true only if you actually want visa sponsorship: it makes the
+  # screener red-flag every "must be authorised to work in the US" posting,
+  # which is most of them, and your queue will get much thinner.
+  needs_sponsorship: false
+  notice_period: "1 month"       # CONFIRM: what CodingCops actually requires
+  salary_expectation: ""         # free text; used to pre-fill screener answers
+
+# ─── Pipeline tuning ─────────────────────────────────────────────────────────
+scoring:
+  min_score: 65                  # below this, a job never reaches your queue
+  daily_queue_size: 10           # your review time is the real bottleneck
+  tailor_threshold: 75           # only jobs at/above this get resume tailoring
+  # Pure-Python cutoff applied before any Gemini spend. At the default 20 a
+  # crawl shortlisted 54 jobs, half of them SAP/costing/process-engineering
+  # roles scoring 25 purely because their title contains "Engineer". Genuine
+  # matches for this stack land at 50 and up.
+  min_heuristic: 38
