@@ -129,15 +129,74 @@ Targeted Connects │ 3 │              │ 2 │ Engage on Peer & Lead Posts
 
 Here are 4 concrete paths we can build into this repository to turn it into a full-scale growth engine:
 
-### Option 1: AI-Powered Feed Engagement Assistant (High ROI)
+### Option 1: AI-Powered Feed Engagement & Comment Engine (Phase 1 Target)
 > *The secret to rapid LinkedIn growth is writing high-value comments on posts by creators and tech leaders in your niche within the first 1-2 hours of posting.*
 
-- **How it works:**
-  1. A headless stealth browser (Playwright with your session cookie) monitors top hashtags (`#typescript`, `#nodejs`, `#nestjs`, `#graphql`, `#softwareengineering`, `#webdevelopment`) and a curated list of tech influencers / hiring managers.
-  2. When a relevant post is detected, the post text is extracted.
-  3. Gemini drafts **2-3 insightful technical comments** (e.g., sharing a practical edge-case or alternative architectural approach).
-  4. You review and click "Approve" (or have it post automatically within safe daily limits).
-- **Impact:** Positions you as an expert in front of the creator's audience, driving profile visits and inbound connection requests.
+#### Why Traditional "AI Comments" Fail (The Slop Profile)
+Generic AI comment bots get immediately flagged, ignored, or blocked because they exhibit classic tells:
+- **The Praise-Parrot**: *"Great post! Completely agree that TypeScript is essential for modern web development. Thanks for sharing!"* (Zero value, screams bot).
+- **The Mini-Essay**: 4 paragraphs with bullet points, bold headers, and rocket emojis under a casual 3-sentence update.
+- **Corporate Buzzwords**: *"In today's fast-paced tech landscape, leveraging GraphQL and NestJS provides true synergy."*
+- **Generic Engagement Bait**: *"What are your thoughts on this? Agree?"*
+
+#### The Senior Engineer Anti-Slop Comment Framework
+Genuine high-impact comments from senior developers follow 4 specific archetypes that our engine will generate:
+
+1. **Archetype A: Edge-Case & Gotcha (`edge_case`)**
+   - Agrees with the premise, but adds a concrete real-world production gotcha.
+   - *Example*: *"Hit this exact issue with NestJS interceptors recently. If a client aborts the request mid-stream, standard lifecycle hooks didn't fire and left orphaned DB locks. Had to listen on `req.on('close')` directly."*
+2. **Archetype B: Nuanced Trade-off (`trade_off`)**
+   - Introduces practical engineering balance without being combative.
+   - *Example*: *"GraphQL federation made sense for our multi-repo setup, but the gateway serialization overhead bit us at higher RPS. Ended up falling back to direct internal gRPC calls between services."*
+3. **Archetype C: Specific Tool / Recipe Drop (`recipe`)**
+   - Mentions a specific library, benchmark, or configuration.
+   - *Example*: *"In Postgres, switching to a `jsonb_path_ops` index dropped query latency from 420ms to 14ms for dynamic filters. Worth benchmarking if you have high-cardinality keys."*
+4. **Archetype D: Technical Inquiry (`inquiry`)**
+   - Asks a sharp, curious engineering question about their benchmark or setup.
+   - *Example*: *"Curious how you handled schema migrations across multi-tenant databases here? Did you spin up a schema per tenant or stick with row-level security?"*
+
+#### System Architecture for Option 1
+```
+┌────────────────────────────────────────────────────────┐
+│               1. Targeted Feed Discovery               │
+│  - Target keywords: #nestjs, #typescript, #graphql,   │
+│    #postgresql, #nodejs, system design                 │
+│  - Curated creator/lead lists in config/engagement.yaml│
+│  - Playwright stealth session with `li_at` cookie       │
+└──────────────────────────┬─────────────────────────────┘
+                           │
+                           ▼
+┌────────────────────────────────────────────────────────┐
+│             2. Multi-Archetype Generation              │
+│  - Grounded in your engineering persona (Faheem Sajid) │
+│  - Generates 3 distinct angles per post                │
+│    (Edge Case, Trade-off, Tooling Recipe)              │
+└──────────────────────────┬─────────────────────────────┘
+                           │
+                           ▼
+┌────────────────────────────────────────────────────────┐
+│              3. Strict Anti-AI Quality Gate            │
+│  - Word limit: 30 - 75 words strictly                  │
+│  - Banned words: "insightful", "great post", "agree",  │
+│    "delve", "testament", em-dashes (—/–), emojis       │
+│  - No bullet points, no bolding, no headers            │
+└──────────────────────────┬─────────────────────────────┘
+                           │
+                           ▼
+┌────────────────────────────────────────────────────────┐
+│           4. Interactive Review CLI (`lgrow engage`)   │
+│  `lgrow engage review`                                 │
+│  - View post context + author                          │
+│  - Choose [1], [2], [3]                                │
+│  - [e]dit in terminal editor                           │
+│  - [c]opy & open URL (manual safety mode)              │
+│  - [p]ost automatically with human typing jitter       │
+└────────────────────────────────────────────────────────┘
+```
+
+#### Database Tracking (`data/app.db`)
+- `engagement_posts`: Tracks post URN, author, headline, content, URL, discovered time, and processing state.
+- `engagement_comments`: Tracks generated options, selected comment, archetype, approved status, and posting timestamp. Avoids commenting on the same post twice.
 
 ---
 
@@ -187,3 +246,4 @@ When expanding automation into browser interactions (likes, comments, connection
   - Likes/Reactions: Max 20–30 per day.
 - **Randomized Jitter & Delays:** Emulate human mouse movements, realistic scroll pauses, and random intervals between actions (never fixed timer intervals).
 - **Human-in-the-loop for Notes & Comments:** Reviewing AI-drafted comments before they go live ensures your professional reputation stays top-tier.
+
